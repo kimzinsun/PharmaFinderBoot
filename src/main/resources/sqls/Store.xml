@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssg.boot.pharmafinderboot.mapper.StoreMapper">
+
+    <select id="getPharmacies" parameterType="com.ssg.boot.pharmafinderboot.dto.StoreParam"
+            resultType="com.ssg.boot.pharmafinderboot.dto.StoreDto">
+        SELECT *
+        FROM store
+        WHERE dutyAddr LIKE CONCAT('%', #{dutyAddr1}, '%')
+        AND dutyAddr LIKE CONCAT('%', #{dutyAddr2}, '%')
+        <if test="dutyName != null and dutyName != '' ">
+            AND dutyName LIKE CONCAT('%', #{dutyName}, '%')
+        </if>
+        ORDER BY dutyName
+        limit #{recordSize} offset #{offset}
+    </select>
+
+    <select id="countPharmacies" parameterType="com.ssg.boot.pharmafinderboot.dto.StoreParam"
+            resultType="int">
+        SELECT COUNT(*)
+        FROM store
+        WHERE dutyAddr LIKE CONCAT('%', #{dutyAddr1}, '%')
+        AND dutyAddr LIKE CONCAT('%', #{dutyAddr2}, '%')
+        <if test="dutyName != null and dutyName != '' ">
+            AND dutyName LIKE CONCAT('%', #{dutyName}, '%')
+        </if>
+    </select>
+
+    <select id="getPharmacy" parameterType="Integer"
+            resultType="com.ssg.boot.pharmafinderboot.dto.StoreDto">
+        SELECT *
+        FROM store
+        WHERE id = #{id}
+    </select>
+
+    <select id="getStoreQty" parameterType="Integer" resultType="com.ssg.boot.pharmafinderboot.dto.StoreQty">
+        select s.*, p.*
+        from store_stock s join product p
+        where s.product_id = p.id and s.store_id = #{storeId};
+    </select>
+</mapper>

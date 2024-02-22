@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssg.boot.pharmafinderboot.mapper.ProductMapper">
+    <select id="cntProducts" resultType="int" parameterType="com.ssg.boot.pharmafinderboot.dto.PaginationParam">
+        select count(*)
+        from product
+        where
+        <choose>
+            <when test="searchType == 'id'">
+                id like CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="searchType == 'entpName'">
+                entp_name like CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="searchType == 'itemName'">
+                item_name like CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="searchType == 'efcyQes'">
+                efcy_qes like CONCAT('%', #{keyword}, '%')
+            </when>
+        </choose>
+    </select>
+
+    <select id="getProducts" resultType="com.ssg.boot.pharmafinderboot.dto.ProductDto" parameterType="com.ssg.boot.pharmafinderboot.dto.PaginationParam">
+        select p.*, IF(EXISTS(select * from user_bookmark_product ubp where ubp.product_id = p.id and ubp.user_id = #{userId}), true, false) as is_bookmark
+        from product p
+        where
+        <choose>
+            <when test="searchType == 'id'">
+                id like CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="searchType == 'entpName'">
+                entp_name like CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="searchType == 'itemName'">
+                item_name like CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="searchType == 'efcyQes'">
+                efcy_qes like CONCAT('%', #{keyword}, '%')
+            </when>
+        </choose>
+--         order by is_bookmark desc, p.item_name
+        limit #{recordSize} offset #{offset}
+    </select>
+
+</mapper>
