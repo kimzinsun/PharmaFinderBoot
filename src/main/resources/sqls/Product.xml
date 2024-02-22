@@ -45,4 +45,16 @@
         limit #{recordSize} offset #{offset}
     </select>
 
+    <select id="getProductQty" parameterType="Integer" resultType="com.ssg.boot.pharmafinderboot.dto.ProductQty">
+        select ss.*, s.*
+        from store_stock ss join store s
+        where ss.store_id = s.id and ss.product_id = #{productId};
+    </select>
+
+    <select id="getProductById" parameterType="Integer" resultType="com.ssg.boot.pharmafinderboot.dto.ProductDto">
+        select *
+        from product
+        where id = #{id}
+    </select>
+
 </mapper>

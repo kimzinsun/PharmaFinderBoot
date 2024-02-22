@@ -40,4 +40,6 @@
         from store_stock s join product p
         where s.product_id = p.id and s.store_id = #{storeId};
     </select>
+
+
 </mapper>

@@ -3,6 +3,7 @@ package com.ssg.boot.pharmafinderboot.controller;
 import com.ssg.boot.pharmafinderboot.dto.Pagination;
 import com.ssg.boot.pharmafinderboot.dto.PaginationParam;
 import com.ssg.boot.pharmafinderboot.dto.ProductDto;
+import com.ssg.boot.pharmafinderboot.dto.ProductQty;
 import com.ssg.boot.pharmafinderboot.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,13 @@ public class ProductController {
         int count = productService.countProducts(paginationParam);
         Pagination pagination = new Pagination(count, paginationParam);
         return ResponseEntity.ok(Map.of("products", products, "pagination", pagination));
+    }
+
+    @GetMapping("/getproduct")
+    public ResponseEntity<Map<String, Object>> getProduct(Integer productId) {
+        ProductDto product = productService.getProductById(productId);
+        List<ProductQty> productQty = productService.getProductQty(productId);
+        return ResponseEntity.ok(Map.of("product", product, "productQty", productQty));
     }
 
 }
